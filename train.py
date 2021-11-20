@@ -12,7 +12,7 @@ from CSST import CSSTimg
 from utils.tool import Averager, collate_fn
 
 
-def train(model, tr_data_loader, num_epochs=20, itr=1, num_iters=50, loss_hist=Averager(), device=torch.device('cuda:0')):
+def train(model, tr_data_loader, num_epochs=20, itr=1, num_iters=50, loss_hist=Averager(), device=torch.device('cuda:1')):
     writer = SummaryWriter("runs/retina1018/")
 
     for epoch in range(num_epochs):
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     device = torch.device('cuda:1')
 
     anchor_generator = AnchorGenerator(
-    sizes=((2, 4, 8, 16, 32),),
+    sizes=((4, 8, 16, 32, 64),),
     aspect_ratios=((0.5, 1.0, 2.0),)
     )
     model_ft = retinanet_resnet50_fpn(
@@ -92,15 +92,15 @@ if __name__ == "__main__":
     lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, num_epochs*num_iters)
     
     tr_dir =     "/data/jdli/C3train/img"
-    tr_tgt_dir = "/data/jdli/C3train/target_mag23"
+    tr_tgt_dir = "/data/jdli/C3train/target22"
     tr_img = CSSTimg(tr_dir, tr_tgt_dir)
     
     tr_data_loader = DataLoader(
-        tr_img, batch_size=12, shuffle=True, num_workers=16,
+        tr_img, batch_size=8, shuffle=True, num_workers=16,
         collate_fn=collate_fn
         )
 
     train(model_ft, tr_data_loader, device=device, num_epochs=num_epochs)
     torch.cuda.empty_cache()
 #     torch.save(model_ft.state_dict(), "model/Retina1019_mag23.bin")
-    torch.save(model_ft.state_dict(), "/data/jdli/model/Retina1019_mag23.bin")
+    torch.save(model_ft.state_dict(), "/data/jdli/model/Retina1026_mag22.bin")
