@@ -5,8 +5,6 @@ from astropy.io import fits
 from astropy.io.fits import getdata
 from astropy.visualization import ZScaleInterval
 import torch
-# from tqdm import tqdm
-
 
 class CSSTimg():
     """ 
@@ -47,8 +45,6 @@ class CSSTimg():
         target["labels"] = torch.as_tensor(np.array(target_raw["labels"]), dtype=torch.int64)
         target["image_id"] = torch.tensor([idx])
         target["mag"] = torch.as_tensor(np.array(target_raw["mag"]),    dtype=torch.float32)
-#         target["image_name"] =  self.img_names[idx]
-#         target["cat_name"] = self.cat_names[idx]
         return raw, target
     
 if __name__ == "__main__":
